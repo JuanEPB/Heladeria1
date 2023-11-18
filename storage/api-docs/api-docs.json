@@ -1,0 +1,136 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "es una api",
+        "description": "description",
+        "contact": {
+            "name": "tu nombre",
+            "email": "tucorreo@correo.com"
+        },
+        "version": "1.5.8"
+    },
+    "paths": {
+        "/api/products": {
+            "get": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Mostrar productos",
+                "operationId": "ba200e07b9a266ea70688d7765f1836a",
+                "responses": {
+                    "200": {
+                        "description": "mostrar todos los productos"
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error"
+                    }
+                }
+            }
+        },
+        "/api/products/{id}": {
+            "get": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Contiene un producto especifico por su id",
+                "description": "Obtiene un producto especifico por su identificador",
+                "operationId": "f0fdae6025a4fc6364b5a1fa768cd1cf",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Identificador unico del producto",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Producto obtenido exitosamente"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Editar un producto por identificador",
+                "description": "Editar un producto existente",
+                "operationId": "a449d42c110adb3190a603de5614f6d6",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Identificador único de producto",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "cod": {
+                                        "description": "Codigo del producto",
+                                        "type": "string"
+                                    },
+                                    "desc": {
+                                        "description": "Descripción del producto",
+                                        "type": "string"
+                                    },
+                                    "sab": {
+                                        "description": "Sabor del producto",
+                                        "type": "string"
+                                    },
+                                    "pre": {
+                                        "description": "Precio del producto",
+                                        "type": "number"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Producto editado exitosamente"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Eliminar un producto por identificador",
+                "description": "Elimina un producto existente según su identificador",
+                "operationId": "e5806e0f1ae2dd6eb470231f26c36386",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Identificador único de producto",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Producto eliminado exitosamente"
+                    }
+                }
+            }
+        }
+    }
+}

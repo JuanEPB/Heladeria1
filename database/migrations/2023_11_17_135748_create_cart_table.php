@@ -3,9 +3,6 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
-use App\Models\User;
 
 return new class extends Migration
 {
@@ -14,10 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-       $role1 = Role::create(['name' =>'admin']);
-       $role1 = Role::create(['name' =>'usuario']);
-       $user = User::find(1);
-       $user->assignRole($role1);
+        Schema::create('cart', function (Blueprint $table) {
+            $table->id();
+            $table->integer('total');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-       //
+        Schema::dropIfExists('cart');
     }
 };

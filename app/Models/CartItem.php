@@ -3,16 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 
-class Product extends Model
+class CartItem extends Model
 {
     use HasFactory;
-    use SoftDeletes;
 
     #esta es la variable que hace referecía a una tabla
-    protected $table ='product';
+    protected $table ='cartitem';
 
     #esta es la variable que indica la llave primaría
     protected $primaryKey = 'id';
@@ -20,17 +18,22 @@ class Product extends Model
     #hace referencia a created_at y updated_at
     public $timestamps = false;
 
-    #especificacion de la columnas dentro de la tabla
     protected $fillable = [
-        'img','cod','sab','pre'
+        'product_id','cantidad','cart_id'
     ];
 
-    #oculta columnas del modelo
-    protected $hidden = ['created_at','updated_at'];
+     #oculta columnas del modelo
+     protected $hidden = ['created_at','updated_at'];
 
-    public function getImageUrlAttribute()
-    {
-        return asset('storage/' . $this->img);
-    }
+    public function cart(){
 
+        return $this->belongsTo(Cart::class);
+
+}
+public function products(){
+
+    return $this->belongsTo(Products::class);
+
+
+}
 }

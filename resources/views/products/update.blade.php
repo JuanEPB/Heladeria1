@@ -32,6 +32,14 @@
         </div>
 
         <div class="form-group">
+            {{ Form::label('desc', 'sabor del producto') }}
+            {{ Form::text('desc', null, ['class' => 'form-control']) }}
+            @error('desc')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
+        </div>
+        
+        <div class="form-group">
             {{ Form::label('pre', 'Precio del producto') }}
             {{ Form::number('pre', $pro->pre, ['class' => 'form-control']) }}
             @error('pre')

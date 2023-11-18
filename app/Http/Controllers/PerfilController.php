@@ -1,65 +1,76 @@
 <?php
 
+
+// app/Http/Controllers/PerfilController.php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class PerfilController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function editar()
     {
-        //
-        return view('perfil');
+        // Obtener el usuario autenticado
+        $usuario = Auth::user();
+
+        return view('perfil', compact('usuario'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function actualizar(Request $request)
     {
-        //
-    }
+        // Validación de campos
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255',
+            'profile_picture' => 'image|max:2048', // image validation already checks file type
+        ]);
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        if ($validator->fails()) {
+            return redirect()->route('perfil.editar')
+                ->withErrors($validator)
+                ->withInput();
+        }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        // Obtener el usuario autenticado
+        $usuario = Auth::user();
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+        // Actualizar campos de manera segura
+        $usuario->fill([
+            'name' => $request->name,
+            'email' => $request->email,
+        ]);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
+        // Actualizar la foto de perfil si se proporcionó una nueva
+        if ($request->hasFile('profile_picture')) {
+            $fotoPerfil = $request->file('profile_picture');
+            $nombreFoto = $fotoPerfil->getClientOriginalName(); // Obtener el nombre original del archivo
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+            // Asegurarse de que el archivo se haya subido correctamente
+            if ($fotoPerfil->isValid()) {
+                $fotoPerfil->move(public_path('images'), $nombreFoto);
+
+                // Almacenar el nombre de la foto en la base de datos en la columna 'photo'
+                $usuario->photo = $nombreFoto;
+            } else {
+                // Manejar el error de subida de archivo
+                return redirect()->route('perfil.editar')
+                    ->withErrors(['profile_picture' => 'Error al subir la imagen'])
+                    ->withInput();
+            }
+        }
+
+        // Guardar los cambios
+        $usuario->save();
+
+        // Mensaje de éxito
+        Alert::success('Éxito', 'Perfil actualizado con éxito');
+
+        return redirect()->route('home');
     }
 }
+
+

@@ -172,6 +172,8 @@ return [
         Collective\Html\HtmlServiceProvider::class,
         Darryldecode\Cart\CartServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
+        L5Swagger\L5SwaggerServiceProvider::class,
+
 
     ])->toArray(),
 
